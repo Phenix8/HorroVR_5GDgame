@@ -9,6 +9,7 @@
 /Assets/True_Horror*
 /Assets/Zombie*
 /Assets/SteamVR*
+/Assets/*.meta
 
 
 # Visual Studio 2015 cache directory

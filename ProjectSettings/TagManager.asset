@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - champ_de_vision
+  - champ_de_vision2
   layers:
   - Default
   - TransparentFX
