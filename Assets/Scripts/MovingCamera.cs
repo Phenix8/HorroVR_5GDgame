@@ -11,6 +11,7 @@ public class MovingCamera : MonoBehaviour
     public Hand interactableHand2 = null;
     public Vector3 direction;
     public float speed = 1.0f;
+    public float playerHeight = 2.0f;
 
     private bool isMoving = false;
 
@@ -49,6 +50,13 @@ public class MovingCamera : MonoBehaviour
             Vector3 newPosition = playerTr.transform.position;
             newPosition += direction * speed * Time.deltaTime;
             playerTr.transform.position = newPosition;
+        }
+
+        RaycastHit ray;
+
+        if(Physics.Raycast(playerTr.position, Vector3.down, out ray))
+        {
+            playerTr.position = ray.point + Vector3.up * playerHeight;
         }
     }
 
