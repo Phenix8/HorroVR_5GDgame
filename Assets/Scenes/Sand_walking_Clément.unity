@@ -3389,6 +3389,7 @@ MonoBehaviour:
   interactableHand2: {fileID: 327343703}
   direction: {x: 1, y: 0, z: 0}
   speed: 12
+  playerHeight: 3
 --- !u!114 &573790629
 MonoBehaviour:
   m_ObjectHideFlags: 0
