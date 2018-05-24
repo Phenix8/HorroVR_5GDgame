@@ -35,15 +35,13 @@ public class MovingCamera : MonoBehaviour
 
     void Update()
     {
-        if ((interactableHand != null && interactableHand.controller != null && interactableHand.controller.GetHairTriggerDown() )|| Input.GetKey(KeyCode.Space))
+        if (interactableHand != null && interactableHand.controller != null && interactableHand.controller.GetHairTriggerDown())
         {
             isMoving = !isMoving;
-            print("Is moving ? " + isMoving);
         }
-        else if ((interactableHand2 != null && interactableHand2.controller != null && interactableHand2.controller.GetHairTriggerDown()) || Input.GetKey(KeyCode.Space))
+        else if (interactableHand2 != null && interactableHand2.controller != null && interactableHand2.controller.GetHairTriggerDown())
         {
             isMoving = !isMoving;
-            print("Is moving ? " + isMoving);
         }
 
         if (isMoving)
