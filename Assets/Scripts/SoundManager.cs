@@ -60,7 +60,7 @@ public class SoundManager : MonoBehaviour {
         if (playSnakeSound)
         {
             snakeFadeIn = true;
-            InvokeRepeating("PlaySnakeSound", 0.0f, 0.2f);
+            InvokeRepeating("PlaySnakeSound", 0.0f, 0.4f);
         }
     }
 
