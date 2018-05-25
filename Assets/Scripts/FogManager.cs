@@ -27,6 +27,6 @@ public class FogManager : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        enableFog = true;
     }
 }
