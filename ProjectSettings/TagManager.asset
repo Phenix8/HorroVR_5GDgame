@@ -6,6 +6,9 @@ TagManager:
   tags:
   - champ_de_vision
   - champ_de_vision2
+  - LeftTrigger
+  - RightTrigger
+  - InnerTrigger
   layers:
   - Default
   - TransparentFX
