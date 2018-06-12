@@ -12,7 +12,8 @@ public class CamelControler : MonoBehaviour {
     public float rotationTolerance = 0.1f;
 
     public bool isLeft;
-    private bool stop = false;
+    public static bool leftStop = false;
+    public static bool rightStop = false;
 
     void Start () {
 
@@ -37,7 +38,7 @@ public class CamelControler : MonoBehaviour {
     }
 
 
-    void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (isLeft && other.tag == "LeftTrigger")
         {
@@ -51,10 +52,30 @@ public class CamelControler : MonoBehaviour {
             Vector3 rotationVector = Vector3.up * rotationTolerance;
             playerTr.Rotate(rotationVector);
         }
-        else if (other.tag == "InnerTrigger")
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "InnerTrigger")
         {
-            stop = true;
-            print("Inner " + other.name);
+            if (isLeft)
+                leftStop = true;
+            else
+                rightStop = true;
+            //print("Inner enter " + other.name);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "InnerTrigger")
+        {
+            if (isLeft)
+                leftStop = false;
+            else
+                rightStop = false;
+            //print("Inner exit " + other.name);
         }
     }
 }

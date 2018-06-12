@@ -12,7 +12,8 @@ public class FogManager : MonoBehaviour {
 
     void Start ()
     {
-        fog.fogDensity = fogStartDensity;
+        if (fog != null)
+            fog.fogDensity = fogStartDensity;
     }
 	
 

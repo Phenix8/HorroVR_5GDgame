@@ -9,7 +9,6 @@ public class MovingCamera : MonoBehaviour
     public Transform playerTr;
     public Hand interactableHand = null;
     public Hand interactableHand2 = null;
-    public Vector3 direction;
     public float speed = 1.0f;
     public float playerHeight = 2.0f;
 
@@ -18,7 +17,6 @@ public class MovingCamera : MonoBehaviour
 
     private void Start()
     {
-        direction = direction.normalized;
     }
 
     private void HandHoverUpdate(Hand hand)
@@ -45,10 +43,15 @@ public class MovingCamera : MonoBehaviour
             isMoving = !isMoving;
         }
 
-        if (isMoving)
+        if(CamelControler.leftStop && CamelControler.rightStop)
+        {
+            isMoving = false;
+            CamelControler.leftStop = CamelControler.rightStop = false;
+        }
+        else if (isMoving)
         {
             Vector3 newPosition = playerTr.transform.position;
-            newPosition += direction * speed * Time.deltaTime;
+            newPosition += playerTr.forward * speed * Time.deltaTime;
             playerTr.transform.position = newPosition;
         }
 
