@@ -88,7 +88,6 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -1644,7 +1643,6 @@ Camera:
   m_TargetEye: 3
   m_HDR: 0
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
@@ -2265,7 +2263,6 @@ Camera:
   m_TargetEye: 0
   m_HDR: 0
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -3675,7 +3672,17 @@ Prefab:
     - target: {fileID: 82940249216193556, guid: 3d9117771f1579d489f969aae2a68d42,
         type: 2}
       propertyPath: MaxDistance
-      value: 850.4065
+      value: 1091.5431
+      objectReference: {fileID: 0}
+    - target: {fileID: 82823523636089766, guid: 3d9117771f1579d489f969aae2a68d42,
+        type: 2}
+      propertyPath: MaxDistance
+      value: 1041.0457
+      objectReference: {fileID: 0}
+    - target: {fileID: 82842904351733942, guid: 3d9117771f1579d489f969aae2a68d42,
+        type: 2}
+      propertyPath: MaxDistance
+      value: 1030.8918
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3d9117771f1579d489f969aae2a68d42, type: 2}
@@ -4097,7 +4104,6 @@ MonoBehaviour:
   playerTr: {fileID: 576047088}
   interactableHand: {fileID: 1298233616}
   interactableHand2: {fileID: 327343703}
-  direction: {x: 1, y: 0, z: 0}
   speed: 4
   playerHeight: 2
 --- !u!114 &573790629
@@ -9744,7 +9750,6 @@ Camera:
   m_TargetEye: 3
   m_HDR: 0
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10

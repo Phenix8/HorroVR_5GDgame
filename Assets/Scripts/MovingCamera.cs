@@ -28,7 +28,6 @@ public class MovingCamera : MonoBehaviour
         {
             hand.AttachObject(gameObject, Hand.AttachmentFlags.ParentToHand | Hand.AttachmentFlags.DetachOthers | Hand.AttachmentFlags.DetachFromOtherHand);
             interactableHand = hand;
-
         }
     }
 
