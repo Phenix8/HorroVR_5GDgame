@@ -11,16 +11,24 @@ public class CamelControler : MonoBehaviour {
     private Hand interactableHand = null;
 
     public float rotationTolerance = 0.1f;
-    public float speed = 4.0f;
+    public float maxSpeed = 4.0f;
     public float playerHeight = 3.0f;
     public float yAmplitureTolerance = 1.0f;
-
+    private static float currentSpeed = 0.0f;
+    private static float rotationSpeed = 0.0f;
+    private float smoothRatio = 400.0f;
+    
     public bool isLeft;
+    private static bool isInDecceleration = false;
     private static bool isMoving = false;
     private static bool leftAcceleration = false;
     private static bool rightAcceleration = false;
-    public static bool leftStop = false;
-    public static bool rightStop = false;
+    private static bool rotateToLeft = false;
+    private static bool rotateToRight = false;
+    private static bool leftStop = false;
+    private static bool rightStop = false;
+    private static bool rotationLeftSlow = false;
+    private static bool rotationRightSlow = false;
 
     private List<float> yPositions;
 
@@ -44,8 +52,64 @@ public class CamelControler : MonoBehaviour {
 
     void Update () {
 
+        CheckAcceleration();       
+
+        CheckMovement();
+
+        CheckRotation();
+
+        // Régle la distance au sol du personnage
+        RaycastHit ray;
+        if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
+            playerTr.position = ray.point + Vector3.up * playerHeight;      
+    }
+
+    /// <summary>
+    /// Vérifie si le mouvement doit être activé (après une détection d'accélération)
+    /// et déplace le personnage le cas échéant
+    /// </summary>
+    private void CheckMovement()
+    {
+        if (leftStop && rightStop)
+        {
+            isInDecceleration = true;
+            leftStop = rightStop = leftAcceleration = rightAcceleration = false;
+            return;
+        }
+
+        if (isInDecceleration)
+        {
+            currentSpeed -= (maxSpeed / smoothRatio);
+            // print("Déccélération : " + currentSpeed);
+            if (currentSpeed <= 0.0f)
+            {
+                currentSpeed = 0.0f;
+                isInDecceleration = false;
+                isMoving = false;
+                return;
+            }
+            Vector3 newPosition = playerTr.transform.position;
+            newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
+            playerTr.transform.position = newPosition;
+        }
+        else if(isMoving)
+        {
+            currentSpeed += (currentSpeed < maxSpeed) ? (maxSpeed / smoothRatio) : 0.0f;
+            // print(currentSpeed);
+            Vector3 newPosition = playerTr.transform.position;
+            newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
+            playerTr.transform.position = newPosition;
+        }
+    }
+
+    
+    /// <summary>
+    /// Vérifie s'il faut activer l'accélération pour la manette courante
+    /// </summary>
+    private void CheckAcceleration()
+    {
         if (!isMoving)
-        { 
+        {
             // Pour ne pas surcharger la liste + pour détecter le mouvement uniquement avec 100 valeurs
             yPositions.Add(interactableHand.transform.position.y);
             if (yPositions.Count() > 100)
@@ -64,36 +128,14 @@ public class CamelControler : MonoBehaviour {
                 }
             }
         }
-
-        CheckMovement();
-
-        // Régle la distance au sol du personnage
-        RaycastHit ray;
-        if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
-            playerTr.position = ray.point + Vector3.up * playerHeight;      
-    }
-
-    private void CheckMovement()
-    {
-        if (leftStop && rightStop)
-        {
-            print("Stopping movement");
-            isMoving = false;
-            leftStop = rightStop = leftAcceleration = rightAcceleration = false;
-            return;
-        }
-
-        if (isMoving)
-        {
-            Vector3 newPosition = playerTr.transform.position;
-            newPosition += playerTr.forward * speed * Time.deltaTime;
-            playerTr.transform.position = newPosition;
-        }
     }
 
 
-    // Vérifie que le mouvement "vers le haut puis redescente" 
-    // est détecté pour l'accélération du chameau
+    /// <summary>
+    /// Vérifie que le mouvement "vers le haut puis redescente" 
+    /// est détecté pour l'accélération du chameau
+    /// </summary>
+    /// <returns></returns>
     private bool HasToEnableAcceleration()
     {
         // Vérification sur l'amplitude de hauteur     
@@ -129,22 +171,53 @@ public class CamelControler : MonoBehaviour {
             }
         }
 
-        print("isMoving = true");
+        // print("isMoving = true");
         return true;
     }
 
 
+    /// <summary>
+    /// Vérifie s'il faut effectuer uen rotation smooth
+    /// </summary>
+    private void CheckRotation()
+    {
+        if (rotateToLeft || rotateToRight)
+        {
+            rotationSpeed += (rotationSpeed < rotationTolerance) ? (rotationTolerance / smoothRatio) : 0.0f;
+            Vector3 rotationVector = Vector3.up * rotationSpeed;
+            rotationVector *= (rotateToLeft) ? -1 : 1;
+            playerTr.Rotate(rotationVector);
+        }
+        else if (rotationLeftSlow || rotationRightSlow)
+        {
+            rotationSpeed -= (rotationTolerance / smoothRatio);
+            if (rotationSpeed <= 0.0f)
+            {
+                rotationSpeed = 0.0f;
+                rotationLeftSlow = rotationRightSlow = false;
+                return;
+            }
+            Vector3 rotationVector = Vector3.up * rotationSpeed;
+            rotationVector *= (rotationLeftSlow) ? -1 : 1;
+            playerTr.Rotate(rotationVector);
+        }
+    }
+
+    #region Événements de trigger
+
+
     private void OnTriggerStay(Collider other)
     {
+        if (rotationLeftSlow || rotationRightSlow || rotateToLeft || rotateToRight)
+            return;
+
         if (isLeft && other.tag == "LeftTrigger")
         {
-            Vector3 rotationVector = Vector3.up * rotationTolerance * -1;
-            playerTr.Rotate(rotationVector);
+            rotateToLeft = true;
         }
         else if (!isLeft && other.tag == "RightTrigger")
         {
-            Vector3 rotationVector = Vector3.up * rotationTolerance;
-            playerTr.Rotate(rotationVector);
+            rotateToRight = true;
         }
     }
 
@@ -171,5 +244,18 @@ public class CamelControler : MonoBehaviour {
                 rightStop = false;
             //print("Inner exit " + other.name);
         }
+        else if (isLeft && other.tag == "LeftTrigger")
+        {
+            rotateToLeft = false;
+            rotationLeftSlow = true;
+        }
+        else if (!isLeft && other.tag == "RightTrigger")
+        {
+            rotateToRight = false;
+            rotationRightSlow = true;
+        }
     }
+
+    #endregion
+
 }
