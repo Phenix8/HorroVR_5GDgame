@@ -8,7 +8,7 @@ using System.Linq;
 public class CamelControler : MonoBehaviour {
 
     public Transform playerTr;
-    public Hand interactableHand = null;
+    private Hand interactableHand = null;
 
     public float rotationTolerance = 0.1f;
     public float speed = 4.0f;
@@ -27,6 +27,7 @@ public class CamelControler : MonoBehaviour {
 
     void Start () {
         yPositions = new List<float>();
+        interactableHand = this.GetComponent<Hand>();
 	}
 
 
@@ -56,10 +57,7 @@ public class CamelControler : MonoBehaviour {
                 else
                     rightAcceleration = HasToEnableAcceleration();
 
-                if (leftAcceleration || rightAcceleration)
-                    print("leftAcceleration" + leftAcceleration + " rightAcceleration =" + rightAcceleration);
-
-                    if (leftAcceleration && rightAcceleration)
+                if (leftAcceleration && rightAcceleration)
                 {
                     yPositions.Clear();
                     isMoving = true;
@@ -140,13 +138,11 @@ public class CamelControler : MonoBehaviour {
     {
         if (isLeft && other.tag == "LeftTrigger")
         {
-            print("Turning to left");
             Vector3 rotationVector = Vector3.up * rotationTolerance * -1;
             playerTr.Rotate(rotationVector);
         }
         else if (!isLeft && other.tag == "RightTrigger")
         {
-            print("Turning to right");
             Vector3 rotationVector = Vector3.up * rotationTolerance;
             playerTr.Rotate(rotationVector);
         }
