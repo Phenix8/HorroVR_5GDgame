@@ -17,6 +17,8 @@ public class CamelControler : MonoBehaviour {
 
     public bool isLeft;
     private static bool isMoving = false;
+    private static bool leftAcceleration = false;
+    private static bool rightAcceleration = false;
     public static bool leftStop = false;
     public static bool rightStop = false;
 
@@ -41,14 +43,23 @@ public class CamelControler : MonoBehaviour {
 
     void Update () {
 
-        if (!isMoving && isLeft)
+        if (!isMoving)
         { 
             // Pour ne pas surcharger la liste + pour détecter le mouvement uniquement avec 100 valeurs
             yPositions.Add(interactableHand.transform.position.y);
             if (yPositions.Count() > 100)
             {
                 yPositions.RemoveAt(0);
-                if (HasToEnableAcceleration())
+
+                if (isLeft)
+                    leftAcceleration = HasToEnableAcceleration();
+                else
+                    rightAcceleration = HasToEnableAcceleration();
+
+                if (leftAcceleration || rightAcceleration)
+                    print("leftAcceleration" + leftAcceleration + " rightAcceleration =" + rightAcceleration);
+
+                    if (leftAcceleration && rightAcceleration)
                 {
                     yPositions.Clear();
                     isMoving = true;
@@ -70,7 +81,7 @@ public class CamelControler : MonoBehaviour {
         {
             print("Stopping movement");
             isMoving = false;
-            leftStop = rightStop = false;
+            leftStop = rightStop = leftAcceleration = rightAcceleration = false;
             return;
         }
 
@@ -103,7 +114,7 @@ public class CamelControler : MonoBehaviour {
         // Vérification des position en phase ascendante
         for (int i=1; i< maxIndex; i++)
         {
-            if (yPosArray[i] < yPosArray[i-1] - 0.1f)
+            if (yPosArray[i] < yPosArray[i-1] - 0.05f)
             {
                 //print(yPosArray[i] + " < " + yPosArray[i - 1]);
                 return false;
@@ -113,7 +124,7 @@ public class CamelControler : MonoBehaviour {
         // Vérification des position en phase descendante
         for (int i = maxIndex; i < yPosArray.Count(); i++)
         {
-            if (yPosArray[i] > yPosArray[i - 1] + 0.1f)
+            if (yPosArray[i] > yPosArray[i - 1] + 0.05f)
             {
                 //print(yPosArray[i] + " > " + yPosArray[i - 1]);
                 return false;
