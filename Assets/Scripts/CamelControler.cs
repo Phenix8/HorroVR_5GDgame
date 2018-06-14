@@ -16,7 +16,7 @@ public class CamelControler : MonoBehaviour {
     public float yAmplitureTolerance = 1.0f;
     private static float currentSpeed = 0.0f;
     private static float rotationSpeed = 0.0f;
-    private float smoothRatio = 400.0f;
+    public float smoothRatio = 300.0f;
     
     public bool isLeft;
     private static bool isInDecceleration = false;
@@ -79,7 +79,7 @@ public class CamelControler : MonoBehaviour {
 
         if (isInDecceleration)
         {
-            currentSpeed -= (maxSpeed / smoothRatio);
+            currentSpeed -= (maxSpeed / 115.0f);
             // print("Déccélération : " + currentSpeed);
             if (currentSpeed <= 0.0f)
             {
@@ -181,6 +181,9 @@ public class CamelControler : MonoBehaviour {
     /// </summary>
     private void CheckRotation()
     {
+        if (rotateToLeft && rotateToRight)
+            return;
+
         if (rotateToLeft || rotateToRight)
         {
             rotationSpeed += (rotationSpeed < rotationTolerance) ? (rotationTolerance / smoothRatio) : 0.0f;
@@ -190,7 +193,7 @@ public class CamelControler : MonoBehaviour {
         }
         else if (rotationLeftSlow || rotationRightSlow)
         {
-            rotationSpeed -= (rotationTolerance / smoothRatio);
+            rotationSpeed -= (rotationTolerance / 80.0f);
             if (rotationSpeed <= 0.0f)
             {
                 rotationSpeed = 0.0f;
@@ -208,7 +211,7 @@ public class CamelControler : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-        if (rotationLeftSlow || rotationRightSlow || rotateToLeft || rotateToRight)
+        if (rotationLeftSlow || rotationRightSlow)
             return;
 
         if (isLeft && other.tag == "LeftTrigger")
