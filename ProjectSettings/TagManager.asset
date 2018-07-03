@@ -9,6 +9,7 @@ TagManager:
   - LeftTrigger
   - RightTrigger
   - InnerTrigger
+  - toHideStep1
   layers:
   - Default
   - TransparentFX
