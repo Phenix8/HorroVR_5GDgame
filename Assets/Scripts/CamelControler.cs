@@ -14,21 +14,20 @@ public class CamelControler : MonoBehaviour {
     public float maxSpeed = 4.0f;
     public float playerHeight = 3.0f;
     public float yAmplitureTolerance = 1.0f;
+    public float smoothRatio = 300.0f;
+    public float fasterAccelerationDelay = 3.0f;
     private static float currentSpeed = 0.0f;
     private static float rotationSpeed = 0.0f;
-    public float smoothRatio = 300.0f;
+    private static float fasterAccelerationStartTime = 0.0f;
     
     public bool isLeft;
     private static bool isInDecceleration = false;
     private static bool isMoving = false;
-    private static bool leftAcceleration = false;
-    private static bool rightAcceleration = false;
-    private static bool rotateToLeft = false;
-    private static bool rotateToRight = false;
-    private static bool leftStop = false;
-    private static bool rightStop = false;
-    private static bool rotationLeftSlow = false;
-    private static bool rotationRightSlow = false;
+    private static bool isInFasterAcceleration = false;
+    private static bool leftAcceleration = false, rightAcceleration = false;
+    private static bool rotateToLeft = false, rotateToRight = false;
+    private static bool leftStop = false, rightStop = false;
+    private static bool rotationLeftSlow = false, rotationRightSlow = false;
 
     private List<float> yPositions;
 
@@ -73,7 +72,7 @@ public class CamelControler : MonoBehaviour {
         if (leftStop && rightStop)
         {
             isInDecceleration = true;
-            leftStop = rightStop = leftAcceleration = rightAcceleration = false;
+            leftStop = rightStop = leftAcceleration = rightAcceleration = isInFasterAcceleration = false;
             return;
         }
 
@@ -92,13 +91,30 @@ public class CamelControler : MonoBehaviour {
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
             playerTr.transform.position = newPosition;
         }
+
         else if(isMoving)
         {
-            currentSpeed += (currentSpeed < maxSpeed) ? (maxSpeed / smoothRatio) : 0.0f;
-            // print(currentSpeed);
+            float tempMaxSpeed = (isInFasterAcceleration) ? maxSpeed * 2.0f : maxSpeed;
+            currentSpeed += (currentSpeed < tempMaxSpeed) ? (tempMaxSpeed / smoothRatio) : 0.0f;
+                  
+            print(currentSpeed);
+
             Vector3 newPosition = playerTr.transform.position;
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
             playerTr.transform.position = newPosition;
+        }
+
+
+        // Arrêt de la seconde accélération
+        if (isInFasterAcceleration && Time.time > fasterAccelerationStartTime + fasterAccelerationDelay)
+        {
+            if (currentSpeed > maxSpeed)
+                currentSpeed -= (maxSpeed / 115.0f);
+            else
+            {
+                print("stopping faster acceleration");
+                isInFasterAcceleration = false;
+            }
         }
     }
 
@@ -108,7 +124,10 @@ public class CamelControler : MonoBehaviour {
     /// </summary>
     private void CheckAcceleration()
     {
-        if (!isMoving)
+        if (isInDecceleration)
+            return;
+
+        if (!isMoving || (isMoving && !isInFasterAcceleration))
         {
             // Pour ne pas surcharger la liste + pour détecter le mouvement uniquement avec 100 valeurs
             yPositions.Add(interactableHand.transform.position.y);
@@ -123,6 +142,13 @@ public class CamelControler : MonoBehaviour {
 
                 if (leftAcceleration && rightAcceleration)
                 {
+                    if(isMoving && !isInFasterAcceleration)
+                    {
+                        fasterAccelerationStartTime = Time.time;
+                        print("isInFasterAcceleration = true");
+                        isInFasterAcceleration = true;
+                    }
+                    leftAcceleration = rightAcceleration = false;
                     yPositions.Clear();
                     isMoving = true;
                 }
@@ -206,8 +232,8 @@ public class CamelControler : MonoBehaviour {
         }
     }
 
-    #region Événements de trigger
 
+    #region Événements de trigger
 
     private void OnTriggerStay(Collider other)
     {
@@ -223,7 +249,6 @@ public class CamelControler : MonoBehaviour {
             rotateToRight = true;
         }
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -262,3 +287,5 @@ public class CamelControler : MonoBehaviour {
     #endregion
 
 }
+
+
