@@ -15,10 +15,8 @@ public class CamelControler : MonoBehaviour {
     public float playerHeight = 3.0f;
     public float yAmplitureTolerance = 1.0f;
     public float smoothRatio = 300.0f;
-    public float fasterAccelerationDelay = 3.0f;
     private static float currentSpeed = 0.0f;
     private static float rotationSpeed = 0.0f;
-    private static float fasterAccelerationStartTime = 0.0f;
     
     public bool isLeft;
     private static bool isInDecceleration = false;
@@ -50,7 +48,7 @@ public class CamelControler : MonoBehaviour {
 
 
     void Update () {
-
+        
         CheckAcceleration();       
 
         CheckMovement();
@@ -63,6 +61,7 @@ public class CamelControler : MonoBehaviour {
             playerTr.position = ray.point + Vector3.up * playerHeight;      
     }
 
+
     /// <summary>
     /// Vérifie si le mouvement doit être activé (après une détection d'accélération)
     /// et déplace le personnage le cas échéant
@@ -72,21 +71,31 @@ public class CamelControler : MonoBehaviour {
         if (leftStop && rightStop)
         {
             isInDecceleration = true;
-            leftStop = rightStop = leftAcceleration = rightAcceleration = isInFasterAcceleration = false;
+            leftStop = rightStop = leftAcceleration = rightAcceleration = false;
             return;
         }
 
         if (isInDecceleration)
         {
             currentSpeed -= (maxSpeed / 115.0f);
-            // print("Déccélération : " + currentSpeed);
-            if (currentSpeed <= 0.0f)
+
+            // Arrêt de la seconde accélération
+            if(isInFasterAcceleration && currentSpeed < maxSpeed)
+            {
+                print("stopping faster acceleration");
+                currentSpeed = maxSpeed;
+                isInDecceleration = false;
+                isInFasterAcceleration = false;
+                return;
+            }
+            else if (currentSpeed <= 0.0f)
             {
                 currentSpeed = 0.0f;
                 isInDecceleration = false;
                 isMoving = false;
                 return;
             }
+            
             Vector3 newPosition = playerTr.transform.position;
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
             playerTr.transform.position = newPosition;
@@ -94,7 +103,7 @@ public class CamelControler : MonoBehaviour {
 
         else if(isMoving)
         {
-            float tempMaxSpeed = (isInFasterAcceleration) ? maxSpeed * 2.0f : maxSpeed;
+            float tempMaxSpeed = (isInFasterAcceleration) ? maxSpeed * 1.5f : maxSpeed;
             currentSpeed += (currentSpeed < tempMaxSpeed) ? (tempMaxSpeed / smoothRatio) : 0.0f;
                   
             print(currentSpeed);
@@ -103,19 +112,7 @@ public class CamelControler : MonoBehaviour {
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
             playerTr.transform.position = newPosition;
         }
-
-
-        // Arrêt de la seconde accélération
-        if (isInFasterAcceleration && Time.time > fasterAccelerationStartTime + fasterAccelerationDelay)
-        {
-            if (currentSpeed > maxSpeed)
-                currentSpeed -= (maxSpeed / 115.0f);
-            else
-            {
-                print("stopping faster acceleration");
-                isInFasterAcceleration = false;
-            }
-        }
+        
     }
 
     
@@ -142,9 +139,10 @@ public class CamelControler : MonoBehaviour {
 
                 if (leftAcceleration && rightAcceleration)
                 {
-                    if(isMoving && !isInFasterAcceleration)
+                    SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
+
+                    if (isMoving && !isInFasterAcceleration)
                     {
-                        fasterAccelerationStartTime = Time.time;
                         print("isInFasterAcceleration = true");
                         isInFasterAcceleration = true;
                     }
@@ -180,7 +178,7 @@ public class CamelControler : MonoBehaviour {
         // Vérification des position en phase ascendante
         for (int i=1; i< maxIndex; i++)
         {
-            if (yPosArray[i] < yPosArray[i-1] - 0.05f)
+            if (yPosArray[i] < yPosArray[i-1] - 0.02f)
             {
                 //print(yPosArray[i] + " < " + yPosArray[i - 1]);
                 return false;
@@ -190,7 +188,7 @@ public class CamelControler : MonoBehaviour {
         // Vérification des position en phase descendante
         for (int i = maxIndex; i < yPosArray.Count(); i++)
         {
-            if (yPosArray[i] > yPosArray[i - 1] + 0.05f)
+            if (yPosArray[i] > yPosArray[i - 1] + 0.02f)
             {
                 //print(yPosArray[i] + " > " + yPosArray[i - 1]);
                 return false;
@@ -243,16 +241,14 @@ public class CamelControler : MonoBehaviour {
         if (isLeft && other.tag == "LeftTrigger")
         {
             rotateToLeft = true;
+            SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(1000);
         }
         else if (!isLeft && other.tag == "RightTrigger")
         {
             rotateToRight = true;
+            SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(1000);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "InnerTrigger")
+        else if (other.tag == "InnerTrigger")           // TEST POUR MAINTENIR LA DECCELERATION DE TRES RAPIDE JUSQU'A L'ARRET
         {
             if (isLeft)
                 leftStop = true;
@@ -260,6 +256,18 @@ public class CamelControler : MonoBehaviour {
                 rightStop = true;
             //print("Inner enter " + other.name);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //if (other.tag == "InnerTrigger")
+        //{
+        //    if (isLeft)
+        //        leftStop = true;
+        //    else
+        //        rightStop = true;
+        //    //print("Inner enter " + other.name);
+        //}
     }
 
     private void OnTriggerExit(Collider other)
