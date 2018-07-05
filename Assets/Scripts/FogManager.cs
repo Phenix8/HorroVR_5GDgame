@@ -37,6 +37,9 @@ public class FogManager : MonoBehaviour {
 
 	void Update ()
     {
+        if (tempTagsList == null)
+            return;
+
         tempTagsList.Clear();
 
         foreach (string tag in triggers.Keys)       

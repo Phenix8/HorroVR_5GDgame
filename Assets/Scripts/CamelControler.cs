@@ -15,6 +15,7 @@ public class CamelControler : MonoBehaviour {
     public float playerHeight = 3.0f;
     public float yAmplitureTolerance = 1.0f;
     public float smoothRatio = 300.0f;
+    private static float vibrationStartTime = -0.6f;
     private static float currentSpeed = 0.0f;
     private static float rotationSpeed = 0.0f;
     
@@ -55,6 +56,9 @@ public class CamelControler : MonoBehaviour {
 
         CheckRotation();
 
+        if (vibrationStartTime + 0.5f > Time.time && interactableHand != null)
+            SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
+
         // Régle la distance au sol du personnage
         RaycastHit ray;
         if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
@@ -79,8 +83,10 @@ public class CamelControler : MonoBehaviour {
         {
             currentSpeed -= (maxSpeed / 115.0f);
 
+            vibrationStartTime = Time.time;
+
             // Arrêt de la seconde accélération
-            if(isInFasterAcceleration && currentSpeed < maxSpeed)
+            if (isInFasterAcceleration && currentSpeed < maxSpeed)
             {
                 print("stopping faster acceleration");
                 currentSpeed = maxSpeed;
@@ -103,10 +109,11 @@ public class CamelControler : MonoBehaviour {
 
         else if(isMoving)
         {
-            float tempMaxSpeed = (isInFasterAcceleration) ? maxSpeed * 1.5f : maxSpeed;
-            currentSpeed += (currentSpeed < tempMaxSpeed) ? (tempMaxSpeed / smoothRatio) : 0.0f;
-                  
-            print(currentSpeed);
+            float tempMaxSpeed = (isInFasterAcceleration) ? maxSpeed * 2.0f : maxSpeed;
+            if(currentSpeed < tempMaxSpeed)
+                currentSpeed += (tempMaxSpeed / smoothRatio);
+                             
+            //print(currentSpeed);
 
             Vector3 newPosition = playerTr.transform.position;
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
@@ -139,13 +146,12 @@ public class CamelControler : MonoBehaviour {
 
                 if (leftAcceleration && rightAcceleration)
                 {
-                    SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
-
                     if (isMoving && !isInFasterAcceleration)
                     {
                         print("isInFasterAcceleration = true");
                         isInFasterAcceleration = true;
                     }
+                    vibrationStartTime = Time.time;
                     leftAcceleration = rightAcceleration = false;
                     yPositions.Clear();
                     isMoving = true;
@@ -210,7 +216,9 @@ public class CamelControler : MonoBehaviour {
 
         if (rotateToLeft || rotateToRight)
         {
-            rotationSpeed += (rotationSpeed < rotationTolerance) ? (rotationTolerance / smoothRatio) : 0.0f;
+            // Vitesse de rotation dépendant de la vitesse de déplacement
+            float tempRotationTolerance = isInFasterAcceleration ? rotationTolerance : ( isMoving ? rotationTolerance * 2.0f : rotationTolerance * 3.0f);
+            rotationSpeed += (rotationSpeed < tempRotationTolerance) ? (tempRotationTolerance / smoothRatio) : 0.0f;
             Vector3 rotationVector = Vector3.up * rotationSpeed;
             rotationVector *= (rotateToLeft) ? -1 : 1;
             playerTr.Rotate(rotationVector);
@@ -231,6 +239,14 @@ public class CamelControler : MonoBehaviour {
     }
 
 
+    //private void ManageControlerVibrations()
+    //{
+    //    if (vibrationStartTime + 0.6f < Time.time)
+    //        CancelInvoke("ManageControlerVibrations");
+    //    SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
+    //}
+
+
     #region Événements de trigger
 
     private void OnTriggerStay(Collider other)
@@ -241,12 +257,10 @@ public class CamelControler : MonoBehaviour {
         if (isLeft && other.tag == "LeftTrigger")
         {
             rotateToLeft = true;
-            SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(1000);
         }
         else if (!isLeft && other.tag == "RightTrigger")
         {
             rotateToRight = true;
-            SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(1000);
         }
         else if (other.tag == "InnerTrigger")           // TEST POUR MAINTENIR LA DECCELERATION DE TRES RAPIDE JUSQU'A L'ARRET
         {
