@@ -30,6 +30,7 @@ public class CamelControler : MonoBehaviour {
 
     private List<float> yPositions;
 
+    #region Méthodes
 
     void Start () {
         yPositions = new List<float>();
@@ -58,13 +59,9 @@ public class CamelControler : MonoBehaviour {
 
         if (vibrationStartTime + 0.5f > Time.time && interactableHand != null)
             SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
-
-        // Régle la distance au sol du personnage
-        RaycastHit ray;
-        if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
-            playerTr.position = ray.point + Vector3.up * playerHeight;      
+        
+        SetHeightAndOrientation();
     }
-
 
     /// <summary>
     /// Vérifie si le mouvement doit être activé (après une détection d'accélération)
@@ -83,25 +80,26 @@ public class CamelControler : MonoBehaviour {
         {
             currentSpeed -= (maxSpeed / 115.0f);
 
-            vibrationStartTime = Time.time;
 
             // Arrêt de la seconde accélération
-            if (isInFasterAcceleration && currentSpeed < maxSpeed)
-            {
-                print("stopping faster acceleration");
-                currentSpeed = maxSpeed;
-                isInDecceleration = false;
-                isInFasterAcceleration = false;
-                return;
-            }
-            else if (currentSpeed <= 0.0f)
+            if (currentSpeed <= 0.0f)
             {
                 currentSpeed = 0.0f;
                 isInDecceleration = false;
                 isMoving = false;
                 return;
             }
-            
+            else if (isInFasterAcceleration && currentSpeed < maxSpeed)
+            {
+                //print("stopping faster acceleration");
+                currentSpeed = maxSpeed;
+                isInDecceleration = false;
+                isInFasterAcceleration = false;
+                return;
+            }
+
+            vibrationStartTime = Time.time;
+
             Vector3 newPosition = playerTr.transform.position;
             newPosition += playerTr.forward * currentSpeed * Time.deltaTime;
             playerTr.transform.position = newPosition;
@@ -148,7 +146,7 @@ public class CamelControler : MonoBehaviour {
                 {
                     if (isMoving && !isInFasterAcceleration)
                     {
-                        print("isInFasterAcceleration = true");
+                        //print("isInFasterAcceleration = true");
                         isInFasterAcceleration = true;
                     }
                     vibrationStartTime = Time.time;
@@ -246,6 +244,21 @@ public class CamelControler : MonoBehaviour {
     //    SteamVR_Controller.Input((int)interactableHand.controller.index).TriggerHapticPulse(2000);
     //}
 
+    /// <summary>
+    /// Règle la distance au sol du personnage et son orientation
+    /// </summary>
+    private void SetHeightAndOrientation()
+    {
+
+        RaycastHit ray;
+        if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
+        { 
+            playerTr.position = ray.point + Vector3.up * playerHeight;
+            playerTr.up = Vector3.RotateTowards(playerTr.up, ray.normal, Mathf.PI * Time.deltaTime / 30, 1);
+        }
+    }
+
+    #endregion
 
     #region Événements de trigger
 
