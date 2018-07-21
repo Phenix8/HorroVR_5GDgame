@@ -9,6 +9,7 @@ TagManager:
   - LeftTrigger
   - RightTrigger
   - InnerTrigger
+  - Collectible
   layers:
   - Default
   - TransparentFX
