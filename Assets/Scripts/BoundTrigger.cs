@@ -31,7 +31,7 @@ public class BoundTrigger : MonoBehaviour {
 
     private void SetNewFogDensity()
     {
-        if (!fogEnabled && fog.fogDensity == fogStartDensity)
+        if (!fogEnabled && fog.fogDensity <= fogStartDensity)
             return;
 
         // intensification de la densité
@@ -54,8 +54,10 @@ public class BoundTrigger : MonoBehaviour {
         
         if (fogEnabled && Time.time > enableFogStartTime + fogDensityDelay)
         {
+            print("Maximum fog density :" + fog.fogDensity);
+
             fogEnabled = false;
-            Vector3 newPosition = playerTr.transform.position + playerTr.forward * teleportDistance;
+            Vector3 newPosition = playerTr.transform.position - playerTr.forward * teleportDistance;
             playerTr.transform.position = newPosition;
 
             Vector3 rotationVector = Vector3.up * 180.0f;
@@ -68,7 +70,7 @@ public class BoundTrigger : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "MainCamera")
+        if (other.tag == "Hand")
         {          
             print("Enter bounds");
             fogEnabled = true;

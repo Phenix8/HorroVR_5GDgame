@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1296,11 +1296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &206448514
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2615,6 +2610,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562fdac91249aa24baf9df397abac036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTr: {fileID: 576047088}
+  rotationTolerance: 0.1
+  maxSpeed: 4
+  playerHeight: 3
+  yAmplitureTolerance: 1
+  smoothRatio: 300
+  isLeft: 0
 --- !u!1001 &329474613
 Prefab:
   m_ObjectHideFlags: 0
@@ -2678,7 +2680,7 @@ Prefab:
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 23a733898b67a084b8397c881424c269, type: 2}
+      objectReference: {fileID: 2100000, guid: 78712d5136eea3d4eb4a76b02a4372e4, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93acc49b5a9f4e84b89aa62e0282a2a3, type: 2}
   m_IsPrefabParent: 0
@@ -2782,35 +2784,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &378212882
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 405083166}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 378212883}
-  - component: {fileID: 405083168}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &378212883
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 405083166}
-  m_GameObject: {fileID: 378212882}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 405083167}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &405083166
 Prefab:
   m_ObjectHideFlags: 0
@@ -2879,102 +2852,16 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1eb99343a8b067b4684f03b23d613db5, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &405083167
+--- !u!4 &405083167 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 4862248166046266, guid: 1eb99343a8b067b4684f03b23d613db5,
+    type: 2}
   m_PrefabInternal: {fileID: 405083166}
-  m_GameObject: {fileID: 813796764}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1975143027}
-  - {fileID: 378212883}
-  m_Father: {fileID: 1298233615}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &405083168
+--- !u!82 &405083168 stripped
 AudioSource:
-  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 82840848841604910, guid: 1eb99343a8b067b4684f03b23d613db5,
     type: 2}
   m_PrefabInternal: {fileID: 405083166}
-  m_GameObject: {fileID: 378212882}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &413807084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,11 +3059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &429413039
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3418,7 +3300,7 @@ Prefab:
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 23a733898b67a084b8397c881424c269, type: 2}
+      objectReference: {fileID: 2100000, guid: 78712d5136eea3d4eb4a76b02a4372e4, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93acc49b5a9f4e84b89aa62e0282a2a3, type: 2}
   m_IsPrefabParent: 0
@@ -4490,7 +4372,7 @@ GameObject:
   - component: {fileID: 576047087}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5723,21 +5605,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4951361981142268, guid: 27ce25370e5628e4097b7cb95b3a151d,
     type: 2}
   m_PrefabInternal: {fileID: 792123320}
---- !u!1 &813796764
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 405083166}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 405083167}
-  m_Layer: 0
-  m_Name: Missing Prefab
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &819816113
 GameObject:
   m_ObjectHideFlags: 0
@@ -5769,7 +5636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a71150de960c4da3998cf1e2aba78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tagToEnable: toHideStep1
 --- !u!23 &819816115
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6996,11 +6862,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &973930172
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7495,11 +7356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &1021395633
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8863,10 +8719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5db513982feaf48a864e4e268f62c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  disappearStepsNb: 5
-  fogDensityDelay: 1
 --- !u!4 &1166129387
 Transform:
   m_ObjectHideFlags: 0
@@ -10053,6 +9905,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562fdac91249aa24baf9df397abac036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTr: {fileID: 576047088}
+  rotationTolerance: 0.1
+  maxSpeed: 4
+  playerHeight: 3
+  yAmplitureTolerance: 1
+  smoothRatio: 300
+  isLeft: 0
 --- !u!1001 &1300144365
 Prefab:
   m_ObjectHideFlags: 0
@@ -12796,11 +12655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &1613188887
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14612,7 +14466,7 @@ Prefab:
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 23a733898b67a084b8397c881424c269, type: 2}
+      objectReference: {fileID: 2100000, guid: 78712d5136eea3d4eb4a76b02a4372e4, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93acc49b5a9f4e84b89aa62e0282a2a3, type: 2}
   m_IsPrefabParent: 0
@@ -14933,34 +14787,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4646933745565138, guid: 4983f395b2610de4e9f688a87bbd9af9,
     type: 2}
   m_PrefabInternal: {fileID: 1973908505}
---- !u!1 &1975143026
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 405083166}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1975143027}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1975143027
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 405083166}
-  m_GameObject: {fileID: 1975143026}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 405083167}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2006503392
 Prefab:
   m_ObjectHideFlags: 0
@@ -15658,11 +15484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb3f3db89ad1a94da79c5d7186bc9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fog: {fileID: 1394810314}
-  fogStrongDensity: 0.1
-  fogDensityDelay: 1
-  teleportDistance: 1
-  playerTr: {fileID: 576047088}
 --- !u!23 &2117034681
 MeshRenderer:
   m_ObjectHideFlags: 0

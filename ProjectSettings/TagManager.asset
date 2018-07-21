@@ -11,7 +11,7 @@ TagManager:
   - InnerTrigger
   - Collectible
   - toHideStep1
-
+  - Hand
   layers:
   - Default
   - TransparentFX

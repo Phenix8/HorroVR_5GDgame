@@ -254,7 +254,7 @@ public class CamelControler : MonoBehaviour {
         if (Physics.Raycast(playerTr.position, Vector3.down, out ray))
         { 
             playerTr.position = ray.point + Vector3.up * playerHeight;
-            playerTr.up = Vector3.RotateTowards(playerTr.up, ray.normal, Mathf.PI * Time.deltaTime / 30, 1);
+            //playerTr.up = Vector3.RotateTowards(playerTr.up, ray.normal, Mathf.PI * Time.deltaTime / 30, 1);
         }
     }
 

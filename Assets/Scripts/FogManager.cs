@@ -103,7 +103,7 @@ public class FogManager : MonoBehaviour {
                 fog.fogDensity = fogStartDensity;
         }
 
-        // print(Time.time + "  " + (enableFogStartTime + fogDensityDelay));
+        print("New fog density = " + fog.fogDensity);
 
         if (fogEnabled && Time.time > enableFogStartTime + fogDensityDelay)
         {

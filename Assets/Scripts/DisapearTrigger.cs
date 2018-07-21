@@ -23,6 +23,7 @@ public class DisapearTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print("Activating objects dissapear");
         if (FogManager.triggers.ContainsKey(tagToEnable))
             FogManager.triggers[tagToEnable] = true;
     }
