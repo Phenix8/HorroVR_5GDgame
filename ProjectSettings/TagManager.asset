@@ -10,6 +10,8 @@ TagManager:
   - RightTrigger
   - InnerTrigger
   - Collectible
+  - toHideStep1
+
   layers:
   - Default
   - TransparentFX
