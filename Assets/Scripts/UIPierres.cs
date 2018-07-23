@@ -13,18 +13,7 @@ public class UIPierres : MonoBehaviour {
     public GameObject _1blue1, _2blue1, _2blue2, _3blue1, _3blue2, _3blue3;
     public GameObject _1gre1, _2gre1, _2gre2, _3gre1, _3gre2, _3gre3;
     public bool _display;
-    private Hand interactableHand = null;
-
-
-    private void HandHoverUpdate(Hand hand)
-    {
-        //Trigger got pressed
-        if (interactableHand == null && hand.controller.GetHairTriggerDown())
-        {
-            hand.AttachObject(gameObject, Hand.AttachmentFlags.ParentToHand | Hand.AttachmentFlags.DetachOthers | Hand.AttachmentFlags.DetachFromOtherHand);
-            interactableHand = hand;
-        }
-    }
+    public Hand interactableHand = null;
 
 
     private void OnCollisionEnter(Collision collision)
@@ -49,6 +38,8 @@ public class UIPierres : MonoBehaviour {
 	void Update () {
 
 
+        print(interactableHand.controller);
+
         //_display = false;
         _stonecount = _greencount + _redcount + _bluecount;
 
@@ -58,6 +49,8 @@ public class UIPierres : MonoBehaviour {
 
         if (interactableHand != null && interactableHand.controller.GetHairTriggerDown())  //Input.get.GetKeyDown(KeyCode.Space))
         {
+
+            
             foreach (GameObject g in _redstones)            
                 g.SetActive(true);              
             
@@ -154,7 +147,7 @@ public class UIPierres : MonoBehaviour {
             _bluestones.Clear();
             if (_bluestones.Count == 0)
             {
-                _bluestones.Add(_1red1);
+                _bluestones.Add(_1blue1);
             }
 
         }
@@ -164,8 +157,8 @@ public class UIPierres : MonoBehaviour {
             _bluestones.Clear();
             if (_bluestones.Count < 2)
             {
-                _bluestones.Add(_2red1);
-                _bluestones.Add(_2red2);
+                _bluestones.Add(_2blue1);
+                _bluestones.Add(_2blue2);
             }
         }
 
@@ -174,9 +167,9 @@ public class UIPierres : MonoBehaviour {
             _bluestones.Clear();
             if (_bluestones.Count < 3)
             {
-                _bluestones.Add(_3red1);
-                _bluestones.Add(_3red2);
-                _bluestones.Add(_3red3);
+                _bluestones.Add(_3blue1);
+                _bluestones.Add(_3blue2);
+                _bluestones.Add(_3blue3);
             }
         }
 
@@ -185,7 +178,7 @@ public class UIPierres : MonoBehaviour {
             _greenstones.Clear();
             if (_greenstones.Count == 0)
             {
-                _greenstones.Add(_1red1);
+                _greenstones.Add(_1gre1);
             }
 
         }
@@ -195,8 +188,8 @@ public class UIPierres : MonoBehaviour {
             _greenstones.Clear();
             if (_greenstones.Count < 2)
             {
-                _greenstones.Add(_2red1);
-                _greenstones.Add(_2red2);
+                _greenstones.Add(_2gre1);
+                _greenstones.Add(_2gre2);
             }
         }
 
@@ -205,9 +198,9 @@ public class UIPierres : MonoBehaviour {
             _greenstones.Clear();
             if (_greenstones.Count < 3)
             {
-                _greenstones.Add(_3red1);
-                _greenstones.Add(_3red2);
-                _greenstones.Add(_3red3);
+                _greenstones.Add(_3gre1);
+                _greenstones.Add(_3gre2);
+                _greenstones.Add(_3gre3);
             }
         }
     }
