@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIstoneBehaviour : MonoBehaviour {
     public GameObject _center;
     public int _rotatespeed;
+    public bool _triggered;
 	// Use this for initialization
     /*OnCollisionEnter(Collision collision)
     {
@@ -18,7 +19,16 @@ public class UIstoneBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.RotateAround(_center.transform.position, Vector3.up, _rotatespeed * Time.deltaTime);
+        if(GameObject.Find("BlankController_Hand2")!= null)
+        {
+            _triggered = true;
+        }
+        if(_triggered)
+        {
+            _center.transform.parent = GameObject.Find("BlankController_Hand2").transform;
+        }
+
+        transform.RotateAround(_center.transform.position, Vector3.left, _rotatespeed * Time.deltaTime);
 
 	}
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour {
 
-    public GameObject _stone;
+    public GameObject _stone, _hand;
     public bool _go, _shrink;
     Vector3 _smallsize = Vector3.zero;
-    public float _radius;
+    public float _radius, _shrinkspeed, _movespeed;
     public Collider[] _gems;
+
     // Use this for initialization
     /* void OnCollisionEnter (Collision col)
      {
@@ -26,6 +27,7 @@ public class PlayerManager : MonoBehaviour {
 
          }
      }*/
+
     void Start () {
 
         //_radius = GetComponent<SphereCollider>().radius;
@@ -38,14 +40,14 @@ public class PlayerManager : MonoBehaviour {
         foreach (Collider c in _gems)
             
         {
-            if (c.gameObject.tag == "Collectible")
+            if (c.gameObject.tag == "redstone" || c.gameObject.tag == "bluestone" || c.gameObject.tag == "greenstone")
             {
                 
                // c.gameObject.GetComponent<SphereCollider>().enabled = false;
-                c.gameObject.transform.position = Vector3.MoveTowards(c.gameObject.transform.position, transform.position, 2 * Time.deltaTime);
+                c.gameObject.transform.position = Vector3.MoveTowards(c.gameObject.transform.position, _hand.transform.position, _movespeed * Time.deltaTime);
                 if (c.gameObject.transform.localScale != _smallsize)
                 {
-                    c.gameObject.transform.localScale = c.gameObject.transform.localScale * 0.987f;
+                    c.gameObject.transform.localScale = c.gameObject.transform.localScale * _shrinkspeed;
 
                 }
                 else

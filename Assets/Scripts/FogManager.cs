@@ -46,7 +46,6 @@ public class FogManager : MonoBehaviour {
             if (triggers[tag])
                 tempTagsList.Add(tag);
         
-
         // Lancement de l'intensification du brouillard
         if (tempTagsList.Count != 0 && !fogEnabled)
         {
@@ -55,16 +54,16 @@ public class FogManager : MonoBehaviour {
             enableFogStartTime = Time.time;
         }
 
-        SetNewFogDensity(tempTagsList);
+        SetNewFogDensity();
     }
 
 
-    private void MakeDisapearObjects(List<string> tags)
+    private void MakeDisapearObjects()
     {
-        if (tags.Count == 0)
+        if (tempTagsList.Count == 0)
             return;
 
-        foreach(string tag in tags)
+        foreach(string tag in tempTagsList)
         { 
             GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
 
@@ -79,7 +78,7 @@ public class FogManager : MonoBehaviour {
     }
 
 
-    private void SetNewFogDensity(List<string> tags)
+    private void SetNewFogDensity()
     {
         if (!fogEnabled && fog.fogDensity == fogStartDensity)
             return;
@@ -108,7 +107,7 @@ public class FogManager : MonoBehaviour {
         if (fogEnabled && Time.time > enableFogStartTime + fogDensityDelay)
         {
             fogEnabled = false;
-            MakeDisapearObjects(tempTagsList);
+            MakeDisapearObjects();
         }
     }
 

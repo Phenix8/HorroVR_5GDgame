@@ -34,7 +34,7 @@ public class BoundTrigger : MonoBehaviour {
         if (!fogEnabled && fog.fogDensity <= fogStartDensity)
             return;
 
-        // intensification de la densité
+        // Intensification de la densité
         if (fogEnabled)
         {
             if (fog.fogDensity < fogStrongDensity)
@@ -42,7 +42,7 @@ public class BoundTrigger : MonoBehaviour {
             else
                 fog.fogDensity = fogStrongDensity;
         }
-        // réduction de la densité
+        // Réduction de la densité
         else
         {
             if (fog.fogDensity > fogStartDensity)
@@ -51,7 +51,8 @@ public class BoundTrigger : MonoBehaviour {
                 fog.fogDensity = fogStartDensity;
         }
 
-        
+      
+        // Téléportation du joueur
         if (fogEnabled && Time.time > enableFogStartTime + fogDensityDelay)
         {
             print("Maximum fog density :" + fog.fogDensity);

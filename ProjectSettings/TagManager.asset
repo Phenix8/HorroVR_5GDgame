@@ -12,6 +12,9 @@ TagManager:
   - Collectible
   - toHideStep1
   - Hand
+  - greenstone
+  - bluestone
+  - redstone
   layers:
   - Default
   - TransparentFX
