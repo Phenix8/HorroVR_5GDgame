@@ -28,6 +28,9 @@ public class CamelControler : MonoBehaviour {
     private static bool leftStop = false, rightStop = false;
     private static bool rotationLeftSlow = false, rotationRightSlow = false;
 
+    public static bool disableSpeedChange;
+    public static bool disableRotationChange;
+
     private List<float> yPositions;
 
     #region Méthodes
@@ -35,7 +38,8 @@ public class CamelControler : MonoBehaviour {
     void Start () {
         yPositions = new List<float>();
         interactableHand = this.GetComponent<Hand>();
-	}
+        disableSpeedChange = disableRotationChange = false;
+    }
 
 
     private void HandHoverUpdate(Hand hand)
@@ -69,7 +73,7 @@ public class CamelControler : MonoBehaviour {
     /// </summary>
     private void CheckMovement()
     {
-        if (leftStop && rightStop)
+        if (leftStop && rightStop && !disableSpeedChange)
         {
             isInDecceleration = true;
             leftStop = rightStop = leftAcceleration = rightAcceleration = false;
@@ -79,7 +83,6 @@ public class CamelControler : MonoBehaviour {
         if (isInDecceleration)
         {
             currentSpeed -= (maxSpeed / 115.0f);
-
 
             // Arrêt de la seconde accélération
             if (currentSpeed <= 0.0f)
@@ -144,7 +147,7 @@ public class CamelControler : MonoBehaviour {
 
                 if (leftAcceleration && rightAcceleration)
                 {
-                    if (isMoving && !isInFasterAcceleration)
+                    if (isMoving && !isInFasterAcceleration&& !disableSpeedChange)
                     {
                         //print("isInFasterAcceleration = true");
                         isInFasterAcceleration = true;
@@ -209,7 +212,7 @@ public class CamelControler : MonoBehaviour {
     /// </summary>
     private void CheckRotation()
     {
-        if (rotateToLeft && rotateToRight)
+        if ((rotateToLeft && rotateToRight)||disableRotationChange)
             return;
 
         if (rotateToLeft || rotateToRight)

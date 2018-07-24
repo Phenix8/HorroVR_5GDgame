@@ -40,7 +40,7 @@ public class PlayerManager : MonoBehaviour {
         foreach (Collider c in _gems)
             
         {
-            if (c.gameObject.tag == "redstone" || c.gameObject.tag == "bluestone" || c.gameObject.tag == "greenstone")
+            if (c.gameObject.tag == "toHideStep3" || c.gameObject.tag == "toHideStep6" || c.gameObject.tag == "toHideStep8")
             {
                 
                // c.gameObject.GetComponent<SphereCollider>().enabled = false;

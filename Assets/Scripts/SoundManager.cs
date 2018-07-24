@@ -18,12 +18,15 @@ public class SoundManager : MonoBehaviour {
     private float startTime, lastWhisperTime = -1.0f;
     private bool hasSnakeSoundToPlay = false, snakeFadeIn = true, whisperFadeIn = true;
 
+    public static bool _snakesoundtoplay;
+
 
     void Start ()
     {
         startTime = Time.time;
         whisperSource.volume = snakeSource.volume = 0.0f;
         Random.InitState(50000);
+        _snakesoundtoplay = false;
     }
 	
 
@@ -35,7 +38,7 @@ public class SoundManager : MonoBehaviour {
             radioSource.Stop();
         
 
-        if (Time.time > endRadioTime + playWhisperDelay)
+       /* if (Time.time > endRadioTime + playWhisperDelay)
         {
             bool playWhisper = (Random.Range(0, whisperProbability)) == 0;
 
@@ -44,7 +47,7 @@ public class SoundManager : MonoBehaviour {
                 whisperFadeIn = true;
                 InvokeRepeating("PlayWhisperSound", 0.0f, 0.8f);
             }
-        }
+        }*/
 
         CheckSnakeSoundPlay();
 	}
@@ -52,7 +55,7 @@ public class SoundManager : MonoBehaviour {
 
     void CheckSnakeSoundPlay()
     {
-        if (snakeSource.volume > 0.1f)
+        if (snakeSource.volume > 0.1f || _snakesoundtoplay )
             return;
 
         bool playSnakeSound = (Random.Range(0, snakeProbability)) == 0;

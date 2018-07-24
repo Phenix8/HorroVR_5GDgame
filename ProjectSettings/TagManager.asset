@@ -15,6 +15,10 @@ TagManager:
   - greenstone
   - bluestone
   - redstone
+  - toHideStep2
+  - toHideStep3
+  - toHideStep6
+  - toHideStep8
   layers:
   - Default
   - TransparentFX
